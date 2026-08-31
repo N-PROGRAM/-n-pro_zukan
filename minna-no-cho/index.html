@@ -1,1 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>(n) PROGRAM みんなの帳</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #F4F2EB;
+    --card: #FDFCF8;
+    --ink: #1B2A41;
+    --indigo: #22406B;
+    --shu: #C73E3A;
+    --faint: #8A8F98;
+    --line: #DDD8CB;
+    --mincho: 'Shippori Mincho', 'Hiragino Mincho ProN', serif;
+    --gothic: 'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--paper); color: var(--ink); font-family: var(--gothic); }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 40px 16px 96px; }
 
+  header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; }
+  .eyebrow { color: var(--shu); letter-spacing: 0.35em; font-size: 11px; font-weight: 700; }
+  h1 { font-family: var(--mincho); font-size: 34px; color: var(--indigo); line-height: 1.2; margin-top: 6px; }
+  .lead { font-size: 13px; color: var(--faint); margin-top: 8px; line-height: 1.8; }
+  .tate { writing-mode: vertical-rl; font-family: var(--mincho); color: var(--line); font-size: 14px; letter-spacing: 0.3em; margin-top: 4px; }
+
+  .composer { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 20px; margin-bottom: 40px; box-shadow: 0 1px 0 rgba(27,42,65,0.06); }
+  label { font-size: 12px; font-weight: 700; color: var(--indigo); display: block; }
+  input, textarea { width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: 8px 12px; margin-top: 4px; font-size: 15px; background: #fff; font-family: var(--gothic); }
+  textarea { font-family: var(--mincho); line-height: 1.9; resize: vertical; }
+  input { margin-bottom: 16px; }
+  input:focus, textarea:focus, button:focus-visible { outline: 2px solid var(--indigo); outline-offset: 2px; }
+
+  .composer-foot { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+  .notice { font-size: 12px; color: var(--faint); min-height: 1em; }
+  .btn-shu { background: var(--shu); color: #fff; border: none; border-radius: 999px; padding: 8px 24px; font-weight: 700; font-size: 14px; letter-spacing: 0.15em; cursor: pointer; font-family: var(--gothic); }
+  .btn-shu:disabled { background: var(--line); cursor: default; }
+
+  .list-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .list-head h2 { font-family: var(--mincho); font-size: 16px; color: var(--indigo); }
+  .btn-refresh { border: 1px solid var(--line); background: var(--card); color: var(--indigo); border-radius: 999px; padding: 4px 16px; font-size: 12px; cursor: pointer; font-family: var(--gothic); }
+
+  .empty { border: 1px dashed var(--line); border-radius: 10px; padding: 32px; text-align: center; color: var(--faint); font-size: 14px; line-height: 1.9; }
+  ul { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+  .post { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: flex; gap: 16px; }
+  .hanko { flex-shrink: 0; width: 44px; height: 44px; border: 2px solid var(--shu); color: var(--shu); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: var(--mincho); font-weight: 700; font-size: 20px; transform: rotate(-4deg); background: #fff; }
+  .post-main { flex: 1; min-width: 0; }
+  .post-meta { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .post-name { font-weight: 700; font-size: 14px; }
+  .post-date { font-size: 11px; color: var(--faint); }
+  .post-text { margin-top: 8px; font-family: var(--mincho); font-size: 15px; line-height: 2.0; white-space: pre-wrap; overflow-wrap: break-word; }
+  .post-actions { display: flex; gap: 12px; margin-top: 8px; }
+  .link-btn { background: none; border: none; padding: 0; font-size: 12px; text-decoration: underline; cursor: pointer; font-family: var(--gothic); }
+  .link-edit { color: var(--indigo); }
+  .link-del { color: var(--shu); }
+  .edit-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .btn-save { background: var(--indigo); color: #fff; border: none; border-radius: 999px; padding: 4px 16px; font-size: 12px; font-weight: 700; cursor: pointer; font-family: var(--gothic); }
+  .btn-cancel { border: 1px solid var(--line); background: none; color: var(--faint); border-radius: 999px; padding: 4px 16px; font-size: 12px; cursor: pointer; font-family: var(--gothic); }
+
+  footer { margin-top: 56px; text-align: center; color: var(--faint); font-size: 11px; letter-spacing: 0.2em; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <p class="eyebrow">(n) PROGRAM</p>
+      <h1>みんなの帳</h1>
+      <p class="lead">ここは参加者みんなで書き込む記帳ページ。<br />名前を添えて、いまの声をひとこと残してください。</p>
+    </div>
+    <p class="tate" aria-hidden="true">私とは、を巡る声</p>
+  </header>
+
+  <section class="composer">
+    <label for="name">おなまえ</label>
+    <input id="name" maxlength="20" placeholder="例:なな" />
+    <label for="text">ひとこと</label>
+    <textarea id="text" rows="4" maxlength="1000" placeholder="いま感じていることを、そのまま"></textarea>
+    <div class="composer-foot">
+      <span class="notice" id="notice"></span>
+      <button class="btn-shu" id="submit">記帳する</button>
+    </div>
+  </section>
+
+  <div class="list-head">
+    <h2 id="count">これまでの声</h2>
+    <button class="btn-refresh" id="refresh">最新にする</button>
+  </div>
+
+  <div id="board"><p style="color:var(--faint);font-size:14px;">帳面をひらいています…</p></div>
+
+  <footer>(n) PROGRAM — みんなの帳</footer>
+</div>
+
+<script>
+// ★ ここにデプロイしたWorkerのURLを貼ってください(末尾スラッシュなし)
+const API_URL = "https://n-program-board.あなたのサブドメイン.workers.dev";
+
+// ---- 本人の目印(このブラウザに保存) ----
+function getIdentity() {
+  let raw = localStorage.getItem("board-me");
+  if (raw) return JSON.parse(raw);
+  const me = { token: crypto.randomUUID(), name: "" };
+  localStorage.setItem("board-me", JSON.stringify(me));
+  return me;
+}
+const me = getIdentity();
+
+const $ = (id) => document.getElementById(id);
+let posts = [];
+let editingId = null;
+
+function fmtDate(ts) {
+  const d = new Date(ts);
+  const p = (n) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}.${p(d.getMonth()+1)}.${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+function flash(msg) {
+  $("notice").textContent = msg;
+  setTimeout(() => { $("notice").textContent = ""; }, 2500);
+}
+
+function esc(s) {
+  const div = document.createElement("div");
+  div.textContent = s;
+  return div.innerHTML;
+}
+
+function render() {
+  $("count").textContent = "これまでの声" + (posts.length ? "・" + posts.length : "");
+  const board = $("board");
+  if (!posts.length) {
+    board.innerHTML = '<div class="empty">まだ誰も記帳していません。<br />最初のひとことを残してみませんか。</div>';
+    return;
+  }
+  const ul = document.createElement("ul");
+  posts.forEach((p) => {
+    const li = document.createElement("li");
+    li.className = "post";
+    const mineFlag = localStorage.getItem("post-" + p.id) === "mine";
+    const dateStr = fmtDate(p.createdAt) + (p.updatedAt ? "(編集済み)" : "");
+
+    if (editingId === p.id) {
+      li.innerHTML = `
+        <div class="hanko" aria-hidden="true">${esc((p.name||"?").slice(0,1))}</div>
+        <div class="post-main">
+          <div class="post-meta"><span class="post-name">${esc(p.name)}</span><span class="post-date">${dateStr}</span></div>
+          <textarea id="edit-text" rows="4" maxlength="1000">${esc(p.text)}</textarea>
+          <div class="edit-actions">
+            <button class="btn-save" data-save="${p.id}">保存する</button>
+            <button class="btn-cancel" data-cancel="1">やめる</button>
+          </div>
+        </div>`;
+    } else {
+      li.innerHTML = `
+        <div class="hanko" aria-hidden="true">${esc((p.name||"?").slice(0,1))}</div>
+        <div class="post-main">
+          <div class="post-meta"><span class="post-name">${esc(p.name)}</span><span class="post-date">${dateStr}</span></div>
+          <p class="post-text">${esc(p.text)}</p>
+          ${mineFlag ? `<div class="post-actions">
+            <button class="link-btn link-edit" data-edit="${p.id}">編集する</button>
+            <button class="link-btn link-del" data-del="${p.id}">消す</button>
+          </div>` : ""}
+        </div>`;
+    }
+    ul.appendChild(li);
+  });
+  board.innerHTML = "";
+  board.appendChild(ul);
+}
+
+async function load() {
+  try {
+    const res = await fetch(API_URL + "/posts");
+    posts = await res.json();
+    render();
+  } catch {
+    $("board").innerHTML = '<div class="empty">帳面をひらけませんでした。通信環境を確かめて「最新にする」を押してください。</div>';
+  }
+}
+
+async function submitPost() {
+  const name = $("name").value.trim();
+  const text = $("text").value.trim();
+  if (!name || !text) { flash("名前とひとことを入れてください"); return; }
+  $("submit").disabled = true;
+  try {
+    const res = await fetch(API_URL + "/posts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, text, authorToken: me.token }),
+    });
+    posts = await res.json();
+    // 自分の投稿に目印をつける(最新の先頭が自分の投稿)
+    if (posts[0]) localStorage.setItem("post-" + posts[0].id, "mine");
+    me.name = name;
+    localStorage.setItem("board-me", JSON.stringify(me));
+    $("text").value = "";
+    render();
+    flash("書き込みました");
+  } catch {
+    flash("書き込めませんでした。もう一度お試しください");
+  }
+  $("submit").disabled = false;
+}
+
+async function saveEdit(id) {
+  const text = document.getElementById("edit-text").value.trim();
+  if (!text) return;
+  try {
+    const res = await fetch(`${API_URL}/posts/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text, authorToken: me.token }),
+    });
+    if (!res.ok) throw new Error();
+    posts = await res.json();
+    editingId = null;
+    render();
+    flash("直しました");
+  } catch {
+    flash("保存できませんでした");
+  }
+}
+
+async function removePost(id) {
+  if (!confirm("この書き込みを消しますか?")) return;
+  try {
+    const res = await fetch(`${API_URL}/posts/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ authorToken: me.token }),
+    });
+    if (!res.ok) throw new Error();
+    posts = await res.json();
+    localStorage.removeItem("post-" + id);
+    render();
+    flash("消しました");
+  } catch {
+    flash("消せませんでした");
+  }
+}
+
+document.addEventListener("click", (e) => {
+  const t = e.target;
+  if (t.dataset.edit) { editingId = t.dataset.edit; render(); }
+  else if (t.dataset.cancel) { editingId = null; render(); }
+  else if (t.dataset.save) saveEdit(t.dataset.save);
+  else if (t.dataset.del) removePost(t.dataset.del);
+});
+$("submit").addEventListener("click", submitPost);
+$("refresh").addEventListener("click", () => { load(); flash("最新の状態にしました"); });
+
+$("name").value = me.name || "";
+load();
+setInterval(load, 25000);
+</script>
+</body>
+</html>
