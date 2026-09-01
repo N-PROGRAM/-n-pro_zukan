@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>初体験スキル図鑑 ─ N ARCHIVE</title>
+<title>スキル竹林図鑑 ─ N ARCHIVE</title>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink:#23201c; --ink-soft:#5d564d;
-    --paper:#f5f4ef; --card:#fffdf9;
-    --moe:#4f7a5e; --moe-soft:#e9f0eb;
-    --line:#ddd6cb; --gold:#a8813c; --alert:#a05252; --alert-soft:#f6ebeb;
+    --ink:#3B4A45; --ink-soft:#7A8B84;
+    --paper:#F0F9F3; --card:#ffffff;
+    --moe:#4FA97C; --moe-soft:#E4F5EC;
+    --line:#E0EEE5; --gold:#79CDA9; --alert:#D97285; --alert-soft:#FBE9EE;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--paper); color:var(--ink); font-family:"Zen Kaku Gothic New",sans-serif; line-height:1.85; -webkit-font-smoothing:antialiased; }
+  body { background:linear-gradient(180deg,#EDF9F2 0%,#F2F8FC 55%,#FDF8EE 100%) fixed; color:var(--ink); font-family:"Zen Kaku Gothic New",sans-serif; line-height:1.85; -webkit-font-smoothing:antialiased; }
   .view { display:none; } .view.on { display:block; }
 
   /* ═ 目次 ═ */
@@ -33,9 +33,9 @@
   .entry .t { flex:1; }
   .entry .t b { font-family:"Shippori Mincho",serif; font-size:15.5px; font-weight:600; letter-spacing:.05em; display:block; line-height:1.5; }
   .entry .t small { font-size:11px; color:var(--ink-soft); letter-spacing:.04em; }
-  .entry .no { font-family:"Shippori Mincho",serif; font-size:10px; color:#c4bdb1; letter-spacing:.08em; }
+  .entry .no { font-family:"Shippori Mincho",serif; font-size:10px; color:#AECBBB; letter-spacing:.08em; }
   .entry.empty { cursor:default; opacity:.55; }
-  .entry.empty b { color:#b3aca0; font-weight:500; }
+  .entry.empty b { color:#9FB8AC; font-weight:500; }
 
   /* ═ カード ═ */
   .back { position:sticky; top:0; z-index:5; background:var(--paper); border-bottom:1px solid var(--line); padding:12px 16px; font-size:13px; color:var(--moe); cursor:pointer; font-family:"Shippori Mincho",serif; letter-spacing:.1em; }
@@ -49,7 +49,7 @@
   section { padding:18px 18px 4px; }
   h3 { font-family:"Shippori Mincho",serif; font-size:13.5px; font-weight:600; letter-spacing:.22em; color:var(--moe); display:flex; align-items:center; gap:10px; margin-bottom:10px; }
   h3::after { content:""; flex:1; height:1px; background:var(--line); }
-  .map { background:#f1ede4; border:1px solid var(--line); padding:12px 14px; font-size:12.5px; text-align:center; letter-spacing:.03em; line-height:2; }
+  .map { background:#EAF5EE; border:1px solid var(--line); padding:12px 14px; font-size:12.5px; text-align:center; letter-spacing:.03em; line-height:2; }
   .pin { background:var(--moe-soft); padding:11px 14px; border-left:3px solid var(--moe); margin-bottom:10px; }
   .pin b { display:block; font-size:13.5px; }
   .pin p { font-size:12.5px; color:var(--ink-soft); }
@@ -63,30 +63,61 @@
   .taikan { margin:18px 18px 0; padding:14px; border:1px dashed var(--line); font-size:12.5px; color:var(--ink-soft); }
   .taikan b { color:var(--ink); font-family:"Shippori Mincho",serif; letter-spacing:.1em; font-size:12px; display:block; margin-bottom:4px; }
   footer { padding:18px; text-align:center; font-family:"Shippori Mincho",serif; font-size:10.5px; letter-spacing:.28em; color:var(--ink-soft); }
+
+  /* ── 図書館へ戻るボタン ── */
+  .home-bar { position:sticky; top:0; z-index:6; padding:10px 14px;
+    background:rgba(240,249,243,.88); backdrop-filter:blur(8px);
+    border-bottom:1px solid #E0EEE5; }
+  .home-btn { display:inline-flex; align-items:center; gap:7px;
+    background:#fff; border:1.5px solid #79CDA9; color:#3B7A5C;
+    border-radius:999px; padding:7px 16px; font-size:12.5px; font-weight:700;
+    font-family:"Zen Kaku Gothic New",sans-serif; letter-spacing:.06em;
+    text-decoration:none; box-shadow:0 2px 10px rgba(121,205,169,.28); }
+  .home-btn:active { transform:scale(.96); }
+
+  /* ── タケノコ採番 ── */
+  .take-no { display:flex; flex-direction:column; align-items:center; gap:1px; min-width:30px; }
+  .take-no svg { display:block; }
+  .take-no b { font-family:"Shippori Mincho",serif; font-size:10px; font-weight:600; color:#4FA97C; letter-spacing:.08em; }
+  .entry.empty .take-no b { color:#AECBBB; }
+  /* ── 20秒ゾーン ── */
+  .glance { margin:14px 18px 4px; background:#E4F5EC; border:1.5px solid #BFE5D2; border-radius:12px; padding:13px 14px; }
+  .glance .g-title { font-family:"Shippori Mincho",serif; font-size:11.5px; letter-spacing:.2em; color:#3B7A5C; margin-bottom:8px; }
+  .glance .g-one { font-size:13.5px; font-weight:700; margin-bottom:8px; }
+  .glance .g-flow { font-size:12px; color:#5B6E66; letter-spacing:.02em; margin-bottom:9px; line-height:1.7; }
+  .glance ul { list-style:none; }
+  .glance li { font-size:12.5px; padding:3px 0 3px 1.5em; position:relative; }
+  .glance li::before { content:"⚠"; position:absolute; left:0; color:#D97285; font-size:11px; }
 </style>
 </head>
 <body>
 
 <!-- ═ 目次 ═ -->
 <div class="view on" id="home">
-  <a href="index.html" style="position:sticky; top:0; z-index:6; display:block; background:#f5f4ef; border-bottom:1px solid #ddd6cb; padding:11px 16px; font-family:'Shippori Mincho',serif; font-size:12.5px; letter-spacing:.12em; color:#a8813c; text-decoration:none;">← (n) ARCHIVE LIBRARY にもどる</a>
+  <div class="home-bar"><a class="home-btn" href="index.html"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3B7A5C" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 3l9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>図書館にもどる</a></div>
 
   <div class="head">
-    <div class="en">N ARCHIVE ─ FIRST EXPERIENCES</div>
-    <h1>初体験スキル図鑑</h1>
-    <div class="sub">何者でもないところから、できるようになった記録</div>
+    <div class="en">N ARCHIVE ─ SKILL BAMBOO GROVE</div>
+    <h1>スキル竹林図鑑</h1>
+    <div class="sub">「できた!」がニョキニョキ生える記録</div>
+    <svg width="86" height="34" viewBox="0 0 86 34" fill="none" aria-hidden="true" style="margin-top:6px;">
+      <path d="M43 32 Q37 20 43 8 Q49 20 43 32 Z" fill="#E8C795"/>
+      <path d="M43 11 Q40 17 41 28 M43 11 Q46 17 45 28" stroke="#D3A96E" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M33 14 l-3 -4 M43 9 l0 -5 M53 14 l3 -4" stroke="#F2CE5E" stroke-width="2" stroke-linecap="round"/>
+      <text x="62" y="14" font-family="'Zen Kaku Gothic New',sans-serif" font-size="9" font-weight="700" fill="#F49FB4" transform="rotate(-8 62 14)">ニョッキ!</text>
+    </svg>
   </div>
   <div class="index">
     <div class="week"><span class="w-label">2026.07 ─ 第3週</span><span class="w-count">標本 1</span></div>
     <div class="entry" onclick="openCard('s001')">
       <span class="date">07.13</span>
       <div class="t"><b>GitHub公開 ─ 自分の作ったものを世界に置く</b><small>初体験スキル｜Web・インフラ｜前史：6月の仕込みが効いた回</small></div>
-      <span class="no">001</span>
+      <span class="take-no"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" aria-hidden="true"><path d="M8 19 Q4 12 8 3 Q12 12 8 19 Z" fill="#E8C795"/><path d="M8 5 Q6.5 10 7 16 M8 5 Q9.5 10 9 16" stroke="#D3A96E" stroke-width="1.1" fill="none" stroke-linecap="round"/></svg><b>001</b></span>
     </div>
     <div class="entry empty">
       <span class="date">--.--</span>
-      <div class="t"><b>（次の初体験がここに刺さる）</b></div>
-      <span class="no">002</span>
+      <div class="t"><b>（次のタケノコがここに生える）</b></div>
+      <span class="take-no"><svg width="16" height="20" viewBox="0 0 16 20" fill="none" aria-hidden="true"><path d="M8 19 Q4 12 8 3 Q12 12 8 19 Z" fill="#E9F2EC"/><path d="M8 5 Q6.5 10 7 16 M8 5 Q9.5 10 9 16" stroke="#C6DCCF" stroke-width="1.1" fill="none" stroke-linecap="round"/></svg><b>002</b></span>
     </div>
   </div>
 </div>
@@ -99,6 +130,17 @@
     <div class="title-block">
       <h2>GitHub公開<br>─ 自分の作ったものを世界に置く</h2>
       <div class="subtitle">前提スキル：なし（プログラミング経験なし・英語苦手の状態から）</div>
+    </div>
+
+    <div class="glance">
+      <div class="g-title">20秒でわかる</div>
+      <div class="g-one">GitHubに置いて、Pagesのスイッチを入れると、URLが生まれる。</div>
+      <div class="g-flow">アカウント作成 → リポジトリ(必ずPublic) → index.htmlをアップ → Settings→PagesでmainをSave → 1〜3分でURL誕生</div>
+      <ul>
+        <li>ファイル名は全部小文字の index.html 厳守(カッコ・スペース・大文字で真っ白になる)</li>
+        <li>PrivateリポジトリではPagesが使えない → Publicに</li>
+        <li>反映は1〜3分かかる。古く見えたらキャッシュを疑ってプライベートタブで確認</li>
+      </ul>
     </div>
 
     <section>
@@ -159,7 +201,7 @@
       「プログラマーでも英語ができるわけでもないのに、できた」。知らない世界に自分の手で触れた感覚。ファイルアップが成功しただけで泣きそうに嬉しかった。未知は、構造さえ渡されれば越えられる。そして越えられた理由の半分は、1ヶ月前の自分の直感が先に橋を架けていたこと。
     </div>
 
-    <footer>N ARCHIVE ─ FIRST EXPERIENCES</footer>
+    <footer>N ARCHIVE ─ SKILL BAMBOO GROVE</footer>
   </div>
 </div>
 
