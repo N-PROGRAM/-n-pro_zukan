@@ -178,7 +178,7 @@
       </div>
     </div>
   </div>
-  <div class="crate-hint">スライドで棚を漁る ／ タップで開く <span style="opacity:.45;">v2</span></div>
+  <div class="crate-hint">スライドで棚を漁る ／ タップで開く</div>
 </div>
 
 <!-- ════ No.001 ════ -->
@@ -406,13 +406,6 @@ function goHome() {
   document.getElementById('home').classList.add('on');
   window.scrollTo(0,0);
 }
-// ── 診断バッジ ──
-const dbg = document.createElement('div');
-dbg.style.cssText = 'position:fixed;bottom:6px;left:6px;z-index:999;background:#fff;border:1px solid #ccc;border-radius:8px;padding:4px 8px;font-size:10px;color:#333;max-width:80vw;word-break:break-all;opacity:.85;';
-dbg.textContent = 'JS起動…';
-document.body.appendChild(dbg);
-window.addEventListener('error', ev => { dbg.textContent = 'エラー: ' + ev.message; dbg.style.background = '#FDE7ED'; });
-
 // ── record crate: 棚は常に斜め。タップした一枚だけ抜き出す ──
 const crate = document.getElementById('crate');
 const sleeves = [...crate.querySelectorAll('.sleeve')];
@@ -473,10 +466,6 @@ window.addEventListener('resize', rackUpd);
 sleeves.forEach(s => s.style.transition = 'none');
 rackUpd();
 window.addEventListener('load', rackUpd);
-setTimeout(() => {
-  const cs = getComputedStyle(sleeves[0]);
-  dbg.textContent = 'JS:OK v3 / 実傾き: ' + cs.transform.slice(0, 40) + ' / 枚数:' + sleeves.length + ' / 幅:' + sleeves[0].offsetWidth;
-}, 600);
 // 各カルーセルのドット
 document.querySelectorAll('[data-cr]').forEach(cr => {
   const dots = [...cr.parentElement.querySelectorAll('.dot')];
