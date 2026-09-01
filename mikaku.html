@@ -97,7 +97,7 @@
     transform-style:preserve-3d; will-change:transform;
     transform:rotateY(-56deg) translateZ(-95px) scale(0.92); /* 基礎の棚差し角度 */
   }
-  .sleeve + .sleeve { margin-left:-34%; }
+  .sleeve + .sleeve { margin-left:calc(-0.34 * min(46vw, 230px)); }
   .vinyl {
     position:absolute; left:8%; right:8%; top:0; aspect-ratio:1;
     border-radius:50%; background:
@@ -132,7 +132,7 @@
 
   /* ── 図書館へ戻るボタン ── */
   .home-bar { position:sticky; top:0; z-index:6; padding:10px 14px;
-    background:rgba(240,249,243,.88); backdrop-filter:blur(8px);
+    background:rgba(240,249,243,.96);
     border-bottom:1px solid #E0EEE5; }
   .home-btn { display:inline-flex; align-items:center; gap:7px;
     background:#fff; border:1.5px solid #79CDA9; color:#3B7A5C;
