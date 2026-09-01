@@ -86,24 +86,21 @@
   /* ── record crate ── */
   .crate-wrap { overflow:hidden; }
   .crate {
-    display:flex; overflow-x:auto; padding:42px 36vw 10px;
+    display:flex; gap:14px; overflow-x:auto; padding:34px 18px 6px;
     scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch;
-    scrollbar-width:none; perspective:1000px; perspective-origin:50% 42%;
+    scrollbar-width:none;
   }
   .crate::-webkit-scrollbar { display:none; }
   .sleeve {
-    flex:0 0 46vw; max-width:230px; scroll-snap-align:center;
+    flex:0 0 44vw; max-width:210px; scroll-snap-align:start;
     cursor:pointer; position:relative;
-    transform-style:preserve-3d; will-change:transform;
-    transform:rotateY(-56deg) translateZ(-95px) scale(0.92); /* 基礎の棚差し角度 */
   }
-  .sleeve + .sleeve { margin-left:calc(-0.34 * min(46vw, 230px)); }
   .vinyl {
     position:absolute; left:8%; right:8%; top:0; aspect-ratio:1;
     border-radius:50%; background:
       radial-gradient(circle at 50% 50%, #55505E 0 18%, transparent 18.5%),
       repeating-radial-gradient(circle at 50% 50%, #3B3540 0 2.5px, #46404E 2.5px 5px);
-    transform:translateY(4%); transition:transform .26s cubic-bezier(.2,.8,.3,1);
+    transform:translateY(-15%) rotate(8deg);
     z-index:0; box-shadow:0 6px 18px rgba(59,53,64,.25);
     display:flex; align-items:center; justify-content:center;
   }
@@ -406,66 +403,11 @@ function goHome() {
   document.getElementById('home').classList.add('on');
   window.scrollTo(0,0);
 }
-// ── record crate: 棚は常に斜め。タップした一枚だけ抜き出す ──
-const crate = document.getElementById('crate');
-const sleeves = [...crate.querySelectorAll('.sleeve')];
-const POP = 'rotateY(0deg) translateZ(68px) scale(1.07)';
-let popped = null;
-let popAtX = 0;
-
-function rackUpd() {
-  const mid = crate.scrollLeft + crate.clientWidth / 2;
-  sleeves.forEach(s => {
-    if (s === popped) return;
-    const d = (s.offsetLeft + s.offsetWidth / 2 - mid) / s.offsetWidth;
-    const t = Math.min(1, Math.abs(d) / 0.6);
-    const e = Math.max(t * t * (3 - 2 * t), 0.88);
-    s.style.transform =
-      `rotateY(${(-56 * e).toFixed(2)}deg)` +
-      ` translateZ(${(-95 * e).toFixed(1)}px)` +
-      ` scale(${(1.06 - 0.14 * e).toFixed(3)})`;
-    s.style.zIndex = String(60 - Math.round(e * 40));
-  });
-}
-
-function unpop() {
-  if (!popped) return;
-  const s = popped; popped = null;
-  s.style.transition = 'transform .18s ease-out';
-  s.classList.remove('center');
-  rackUpd();
-}
-
-function popSleeve(s) {
-  if (popped && popped !== s) unpop();
-  s.style.transition = 'transform .42s cubic-bezier(.25,.85,.3,1)';
-  s.style.transform = POP;
-  s.style.zIndex = '99';
-  s.classList.add('center');
-  popped = s;
-  popAtX = crate.scrollLeft;
-}
-
-sleeves.forEach(s => {
-  s.addEventListener('click', () => {
-    if (s.dataset.card) {                      // ワンタップ:即開き
-      openCard(s.dataset.card);
-    } else {
-      popSleeve(s);                            // 未採取はただ眺めるだけ
-    }
-  });
+// ── record crate: フラット横スライド。タップで開く ──
+document.querySelectorAll('#crate .sleeve[data-card]').forEach(sl => {
+  sl.addEventListener('click', () => openCard(sl.dataset.card));
 });
 
-crate.addEventListener('scroll', () => {
-  if (popped && Math.abs(crate.scrollLeft - popAtX) < 8) return;  // 微動は無視
-  unpop();
-  sleeves.forEach(s => { if (s !== popped) s.style.transition = 'transform .16s linear'; });
-  requestAnimationFrame(rackUpd);
-});
-window.addEventListener('resize', rackUpd);
-sleeves.forEach(s => s.style.transition = 'none');
-rackUpd();
-window.addEventListener('load', rackUpd);
 // 各カルーセルのドット
 document.querySelectorAll('[data-cr]').forEach(cr => {
   const dots = [...cr.parentElement.querySelectorAll('.dot')];
