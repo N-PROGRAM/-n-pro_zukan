@@ -95,6 +95,7 @@
     flex:0 0 60vw; max-width:300px; scroll-snap-align:center;
     cursor:pointer; position:relative;
     transform-style:preserve-3d; will-change:transform;
+    transform:rotateY(-56deg) translateZ(-95px) scale(0.92); /* 基礎の棚差し角度 */
   }
   .sleeve + .sleeve { margin-left:-34%; }
   .vinyl {
@@ -165,7 +166,7 @@
       </div>
     </div>
   </div>
-  <div class="crate-hint">スライドで棚を漁る ／ タップで開く</div>
+  <div class="crate-hint">スライドで棚を漁る ／ タップで開く <span style="opacity:.45;">v2</span></div>
 </div>
 
 <!-- ════ No.001 ════ -->
@@ -452,6 +453,7 @@ crate.addEventListener('scroll', () => {
 window.addEventListener('resize', rackUpd);
 sleeves.forEach(s => s.style.transition = 'none');
 rackUpd();
+window.addEventListener('load', rackUpd);
 // 各カルーセルのドット
 document.querySelectorAll('[data-cr]').forEach(cr => {
   const dots = [...cr.parentElement.querySelectorAll('.dot')];
